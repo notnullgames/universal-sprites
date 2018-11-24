@@ -3,11 +3,27 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "muicss": "^0.9.41",
+    "react": "^16.7.0-alpha.2",
+    "react-dom": "^16.7.0-alpha.2",
+    "react-scripts": "2.1.1"
   },
   "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build"
   },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
   "devDependencies": {
-    "canvas": "^2.0.1",
-    "node-sass": "^4.9.4"
+    "canvas": "^2.1.0",
+    "chroma-js": "^1.4.0",
+    "lodash": "^4.17.11"
   }
 }

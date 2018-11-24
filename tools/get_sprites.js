@@ -1,87 +1,73 @@
-// Tools I used to make images
+/**
+ * Internal tool used to create normalized base images
+ * You shouldn't need to run this
+ */
 
 const { Image, createCanvas } = require('canvas')
 const fs = require('fs')
+const skin = require('../src/palettes/skin.json')
+const chroma = require('chroma-js')
 
-// load a pallette from a pallette-image
-const getPalette = async (src) => {
+const unHandledColor = new Set()
+
+// get the mapped color for a given color and 2 palettes
+const findColor = (newColor, inPalette, outPalette, sharedPalette) => {
+  const testColor = chroma(newColor).hex()
+  const ix = inPalette.indexOf(testColor)
+  if (ix !== -1) {
+    return outPalette[ix]
+  } else {
+    if (sharedPalette.indexOf(testColor) === -1) {
+      // TODO: there are too many of these, need to figure out a better map
+      unHandledColor.add(testColor)
+    }
+    return testColor
+  }
+}
+
+// map image from one palette to another
+const transposeImagePalette = (inName, outName, inPalette, outPalette, sharedPalette) => {
   const img = new Image()
   return new Promise((resolve, reject) => {
     img.onload = () => {
-      const cnv = createCanvas(img.width, img.height)
-      const ctx = cnv.getContext('2d')
-      ctx.drawImage(img, 0, 0)
-      const colors = []
-      for (let y = 0; y < img.height; y++) {
-        colors[y] = colors[y] || []
-        for (let x = 0; x < img.width; x++) {
-          const [r, g, b, a] = ctx.getImageData(x, y, 1, 1).data
-          colors[y].push([r, g, b, a])
-        }
-      }
-      resolve(colors)
-    }
-    img.src = src
-  })
-}
-
-// is a color (rgba-array) in a palette (array of rgba-arrays)?
-const findColor = (color, palette) => {
-  let ix = -1
-  palette.forEach((p, i) => {
-    if (p[0] === color[0] && p[1] === color[1] && p[2] === color[2] && p[3] === color[3]) {
-      ix = i
-    }
-  })
-  return ix
-}
-
-// take colors from one palette in an image, transpose to another palette
-const transposeImage = (inSrc, paletteOut, paletteIn, outSrc) => {
-  const img = new Image()
-  return new Promise((resolve, reject) => {
-    img.onload = () => {
-      const cnv = createCanvas(img.width, img.height)
-      const ctx = cnv.getContext('2d')
-      const cnvOut = createCanvas(img.width, img.height)
-      const ctxOut = cnvOut.getContext('2d')
+      const ctx = createCanvas(img.width, img.height).getContext('2d')
+      const ctxOut = createCanvas(img.width, img.height).getContext('2d')
       ctx.drawImage(img, 0, 0)
       for (let x = 0; x < img.width; x++) {
         for (let y = 0; y < img.height; y++) {
-          const [r, g, b, a] = ctx.getImageData(x, y, 1, 1).data
-          const ix = findColor([r, g, b, a], paletteIn)
-          const newColor = (ix !== -1) ? paletteOut[ix] : [r, g, b, a]
-          ctxOut.fillStyle = `rgba( ${newColor[0]}, ${newColor[1]}, ${newColor[2]}, ${newColor[3] / 255})`
+          let [r, g, b, a] = ctx.getImageData(x, y, 1, 1).data
+          a = a > 0 ? 1 : 0
+          ctxOut.fillStyle = findColor([r, g, b, a], inPalette, outPalette, sharedPalette)
           ctxOut.fillRect(x, y, 1, 1)
         }
       }
-      const out = fs.createWriteStream(outSrc)
-      const stream = cnvOut.createPNGStream()
+      const out = fs.createWriteStream(outName)
+      const stream = ctxOut.canvas.createPNGStream()
       stream.pipe(out)
       out.on('finish', () => { resolve() })
     }
-    img.src = inSrc
+    img.src = inName
   })
 }
 
 const run = async () => {
-  const palettes = {
-    skin: await getPalette(`${__dirname}/palette_skin.png`),
-    hair: await getPalette(`${__dirname}/palette_hair.png`)
-  }
-
   // turn orcs into light-human palette
-  await transposeImage(
-    `${__dirname}/../src/assets/Universal-LPC-spritesheet/body/male/orc.png`,
-    palettes.skin[0],
-    palettes.skin[9],
-    `${__dirname}/../src/assets/base/orc_male.png`
+  await transposeImagePalette(
+    `${__dirname}/../Universal-LPC-spritesheet/body/male/orc.png`,
+    `${__dirname}/../src/images/orc_male.png`,
+    skin.Orc,
+    skin.Light,
+    skin.shared
   )
-  await transposeImage(
-    `${__dirname}/../src/assets/Universal-LPC-spritesheet/body/female/orc.png`,
-    palettes.skin[0],
-    palettes.skin[9],
-    `${__dirname}/../src/assets/base/orc_female.png`
+
+  await transposeImagePalette(
+    `${__dirname}/../Universal-LPC-spritesheet/body/female/orc.png`,
+    `${__dirname}/../src/images/orc_female.png`,
+    skin.Orc,
+    skin.Light,
+    skin.shared
   )
+
+  // console.log('unhandled colors', unHandledColor)
 }
 run()

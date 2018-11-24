@@ -1,0 +1,22 @@
+/* global app styles go in here */
+
+main {
+  padding: 0 20px;
+}
+
+.mui-appbar  {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mui-appbar h1,
+.mui-appbar h2,
+.mui-appbar h3,
+.mui-appbar h4,
+.mui-appbar h5,
+.mui-appbar h6
+{
+  margin: 0;
+}
