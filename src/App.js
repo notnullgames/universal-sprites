@@ -1,21 +1,21 @@
 import React, { Fragment, useState } from 'react'
 import Appbar from 'muicss/lib/react/appbar'
 import Radio from 'muicss/lib/react/radio'
+import Option from 'muicss/lib/react/option'
+import Select from 'muicss/lib/react/select'
 
 import DisplayCurrent from './DisplayCurrent'
-import ColorPallette from './ColorPallette'
+import ColorPalette from './ColorPalette'
 
-const skinPalletes = {}
-
-const hairPalletes = {
-  Bald: ''
-}
+import skinPalettes from './palettes/skin.json'
+import hairPalettes from './palettes/hair.json'
 
 export default () => {
   const [ values, setValues ] = useState({
-    base: 'human_male',
-    skin: 'Caucasian',
-    hair: 'Bald'
+    base: 'body/male/human',
+    skin: skinPalettes.Light,
+    hair: hairPalettes.Blonde,
+    hair_style: 'bald'
   })
 
   const onChange = e => {
@@ -34,21 +34,24 @@ export default () => {
         <form>
           <div>
             <h3>Base Model</h3>
-            <Radio name='base' label='Human Male' value='human_male' onChange={onChange} checked={values.base === 'human_male'} />
-            <Radio name='base' label='Human Female' value='human_female' onChange={onChange} checked={values.base === 'human_female'} />
-            <Radio name='base' label='Orc' value='orc_male' onChange={onChange} checked={values.base === 'orc_male'} />
-            <Radio name='base' label='Nosferatu' value='orc_female' onChange={onChange} checked={values.base === 'orc_female'} />
-            <Radio name='base' label='Skeleton' value='skeleton' onChange={onChange} checked={values.base === 'skeleton'} />
+            <Radio name='base' label='Human Male' value='body/male/human' onChange={onChange} checked={values.base === 'body/male/human'} />
+            <Radio name='base' label='Human Female' value='body/female/human' onChange={onChange} checked={values.base === 'body/female/human'} />
+            <Radio name='base' label='Orc Male' value='body/male/orc' onChange={onChange} checked={values.base === 'body/male/orc'} />
+            <Radio name='base' label='Orc Female' value='body/female/orc' onChange={onChange} checked={values.base === 'body/female/orc'} />
+            <Radio name='base' label='Skeleton' value='body/male/skeleton' onChange={onChange} checked={values.base === 'body/male/skeleton'} />
           </div>
-          {values.base !== 'skeleton' && (
+          {values.base !== 'body/male/skeleton' && (
             <Fragment>
               <div>
                 <h3>Skin Color</h3>
-                <ColorPallette name='skin' options={skinPalletes} value={values.skin} onChange={onChange} />
+                <ColorPalette name='skin' options={skinPalettes} value={values.skin} onChange={onChange} />
               </div>
               <div>
                 <h3>Hair</h3>
-                <ColorPallette name='hair' options={hairPalletes} value={values.hair} onChange={onChange} />
+                <Select name='hair_style' label='Style' value={values.hair_style} onChange={onChange}>
+                  <Option value='bald' label='Bald' />
+                </Select>
+                {values.hair_style !== 'bald' && <ColorPalette name='hair' options={hairPalettes} value={values.hair} onChange={onChange} /> }
               </div>
             </Fragment>
           )}

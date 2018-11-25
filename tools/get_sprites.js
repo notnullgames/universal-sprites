@@ -8,8 +8,6 @@ const fs = require('fs')
 const skin = require('../src/palettes/skin.json')
 const chroma = require('chroma-js')
 
-const unHandledColor = new Set()
-
 // get the mapped color for a given color and 2 palettes
 const findColor = (newColor, inPalette, outPalette, sharedPalette) => {
   const testColor = chroma(newColor).hex()
@@ -17,10 +15,6 @@ const findColor = (newColor, inPalette, outPalette, sharedPalette) => {
   if (ix !== -1) {
     return outPalette[ix]
   } else {
-    if (sharedPalette.indexOf(testColor) === -1) {
-      // TODO: there are too many of these, need to figure out a better map
-      unHandledColor.add(testColor)
-    }
     return testColor
   }
 }
@@ -54,7 +48,7 @@ const run = async () => {
   // turn orcs into light-human palette
   await transposeImagePalette(
     `${__dirname}/../Universal-LPC-spritesheet/body/male/orc.png`,
-    `${__dirname}/../src/images/orc_male.png`,
+    `${__dirname}/../src/images/body/male/orc.png`,
     skin.Orc,
     skin.Light,
     skin.shared
@@ -62,12 +56,10 @@ const run = async () => {
 
   await transposeImagePalette(
     `${__dirname}/../Universal-LPC-spritesheet/body/female/orc.png`,
-    `${__dirname}/../src/images/orc_female.png`,
+    `${__dirname}/../src/images/body/female/orc.png`,
     skin.Orc,
     skin.Light,
     skin.shared
   )
-
-  // console.log('unhandled colors', unHandledColor)
 }
 run()

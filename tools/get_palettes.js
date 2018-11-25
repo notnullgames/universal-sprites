@@ -30,6 +30,7 @@ const getPalette = async (src) => {
   })
 }
 
+// get colors that are not in the palette
 const getSharedPalette = (src, palette) => {
   const img = new Image()
   return new Promise((resolve, reject) => {
@@ -64,7 +65,7 @@ const run = async () => {
       await getPalette(`${__dirname}/palette_hair.png`)
     )
   }
-  palettes.skin.shared = await getSharedPalette(`${__dirname}/../Universal-LPC-spritesheet/body/male/light.png`, palettes.skin.Light)
+  // palettes.skin.shared = await getSharedPalette(`${__dirname}/../Universal-LPC-spritesheet/body/male/light.png`, palettes.skin.Light)
 
   await writeJSON(`${__dirname}/../src/palettes/skin.json`, palettes.skin)
   await writeJSON(`${__dirname}/../src/palettes/hair.json`, palettes.hair)

@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "chroma-js": "^1.4.0",
+    "lodash": "^4.17.11",
     "muicss": "^0.9.41",
     "react": "^16.7.0-alpha.2",
     "react-dom": "^16.7.0-alpha.2",
@@ -23,7 +25,6 @@
   ],
   "devDependencies": {
     "canvas": "^2.1.0",
-    "chroma-js": "^1.4.0",
-    "lodash": "^4.17.11"
+    "shelljs": "^0.8.3"
   }
 }
