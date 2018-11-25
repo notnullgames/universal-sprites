@@ -34,7 +34,7 @@
   "gh-pages-deploy": {
     "staticpath": "build",
     "prep": [
-      "build",
+      "build"
     ],
     "commit": "deploy",
     "post": [
