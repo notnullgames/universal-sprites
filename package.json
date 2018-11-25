@@ -12,7 +12,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "deploy": "gh-pages-deploy",
+    "clean-source": "rimraf README.md src tools public Universal-LPC-spritesheet package.json"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -25,6 +27,19 @@
   ],
   "devDependencies": {
     "canvas": "^2.1.0",
+    "gh-pages-deploy": "^0.5.0",
+    "rimraf": "^2.6.2",
     "shelljs": "^0.8.3"
-  }
+  },
+  "gh-pages-deploy": {
+    "staticpath": "build",
+    "prep": [
+      "build",
+    ],
+    "commit": "deploy",
+    "post": [
+      "clean-source"
+    ],
+    "noprompt": true
+  },
 }
