@@ -2,6 +2,7 @@
   "name": "universal-sprites",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://notnullgames.github.io/universal-sprites/",
   "dependencies": {
     "chroma-js": "^1.4.0",
     "lodash": "^4.17.11",
