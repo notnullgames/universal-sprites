@@ -1,88 +1,29 @@
-/* global Image */
+import React, { Fragment } from 'react'
+import * as PIXI from 'pixi.js'
+import { TilingSprite, Stage } from '@inlet/react-pixi'
 
-import React, { useRef, useEffect } from 'react'
-import chroma from 'chroma-js'
-import { isEqual } from 'lodash'
-
-import skinPalettes from './palettes/skin.json'
-import hairPalettes from './palettes/hair.json'
-
-// TODO: animate sprites
-// TODO: do seperate head/face/body and allow all options
-
-// get the mapped color for a given color and 2 palettes
-const findColor = (newColor, inPalette, outPalette, sharedPalette) => {
-  const testColor = chroma(newColor).hex()
-  const ix = inPalette.indexOf(testColor)
-  if (ix !== -1) {
-    return outPalette[ix]
-  } else {
-    return testColor
-  }
-}
-
-// resolve promise functions, one after another
-const promiseSerial = funcs =>
-  funcs.reduce((promise, func) =>
-    promise.then(result => func().then(Array.prototype.concat.bind(result))),
-  Promise.resolve([]))
-
-// load a sprite onto the canvas
-// TODO: use a shader to improve performance?
-const drawSprite = (ctx, imageName, options = {}, palette, paletteIn) => {
-  const { scale = 2, tileCoords = [1, 2], drawCoords = [0, 0], tileSize = [ 64, 64 ] } = options
-  return new Promise((resolve, reject) => {
-    let img = new Image()
-    img.src = require(`./images/${imageName}.png`)
-    img.onload = () => {
-      const [ sourceX, sourceY ] = tileCoords
-      const [ sourceWidth, sourceHeight ] = tileSize
-      const [ destX, destY ] = drawCoords
-      const destWidth = tileSize[0] * scale
-      const destHeight = tileSize[1] * scale
-      if (palette && !isEqual(paletteIn, palette)) {
-        const cnv = document.createElement('canvas')
-        cnv.width = sourceWidth
-        cnv.height = sourceHeight
-        const ctxTemp = cnv.getContext('2d')
-        ctxTemp.drawImage(img, sourceX * sourceWidth, sourceY * sourceHeight, sourceWidth, sourceHeight, 0, 0, sourceWidth, sourceHeight)
-        for (let x = 0; x < sourceWidth; x++) {
-          for (let y = 0; y < sourceHeight; y++) {
-            let [r, g, b, a] = ctxTemp.getImageData(x, y, 1, 1).data
-            a = a > 0 ? 1 : 0
-            ctxTemp.fillStyle = findColor([r, g, b, a], paletteIn, palette)
-            ctxTemp.fillRect(x, y, 1, 1)
-          }
-        }
-        ctx.drawImage(ctxTemp.canvas, 0, 0, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight)
-      } else {
-        ctx.drawImage(img, sourceX * sourceWidth, sourceY * sourceHeight, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight)
-      }
-      resolve()
-    }
-  })
-}
+// TODO: make a shader that handles colors
 
 export default ({ values, ...props }) => {
-  const canvas = useRef(null)
-  useEffect(() => {
-    const gender = (values.base.indexOf('female') !== -1) ? 'female' : 'male'
-    const ctx = canvas.current.getContext('2d')
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-    const imageList = []
-    imageList.push(() => drawSprite(ctx, values.base, { tileCoords: [0, 1], drawCoords: [-32, 0] }, values.skin, skinPalettes.Light))
-    imageList.push(() => drawSprite(ctx, values.base, { tileCoords: [0, 2], drawCoords: [34, 0] }, values.skin, skinPalettes.Light))
-    imageList.push(() => drawSprite(ctx, values.base, { tileCoords: [0, 4], drawCoords: [107, 0] }, values.skin, skinPalettes.Light))
-    imageList.push(() => drawSprite(ctx, values.base, { tileCoords: [0, 3], drawCoords: [175, 0] }, values.skin, skinPalettes.Light))
-
-    if (values.hair_style !== 'bald') {
-      const hairImg = `hair/${gender}/${values.hair_style}`
-      imageList.push(() => drawSprite(ctx, hairImg, { tileCoords: [0, 1], drawCoords: [-32, 0] }, values.hair, hairPalettes.Default))
-      imageList.push(() => drawSprite(ctx, hairImg, { tileCoords: [0, 2], drawCoords: [34, 0] }, values.hair, hairPalettes.Default))
-      imageList.push(() => drawSprite(ctx, hairImg, { tileCoords: [0, 4], drawCoords: [107, 0] }, values.hair, hairPalettes.Default))
-      imageList.push(() => drawSprite(ctx, hairImg, { tileCoords: [0, 3], drawCoords: [175, 0] }, values.hair, hairPalettes.Default))
-    }
-    promiseSerial(imageList)
-  })
-  return (<canvas {...props} ref={canvas} />)
+  const gender = values.base.indexOf('female') === -1 ? 'male' : 'female'
+  const body = PIXI.Texture.fromImage(require(`./images/body/${values.base}.png`))
+  const hair = values.hair_style !== 'bald' && PIXI.Texture.fromImage(require(`./images/hair/${gender}/${values.hair_style}.png`))
+  return (
+    <Stage {...props} options={{ backgroundColor: 0xFFFFFF }} >
+      <Fragment>
+        <TilingSprite texture={body} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={[0, 256]} />
+        <TilingSprite texture={body} height={64} width={64} scale={2} position={[34, 0]} tilePosition={[0, 192]} />
+        <TilingSprite texture={body} height={64} width={64} scale={2} position={[107, 0]} tilePosition={[0, 0]} />
+        <TilingSprite texture={body} height={64} width={64} scale={2} position={[175, 0]} tilePosition={[0, 128]} />
+      </Fragment>
+      {hair && (
+        <Fragment>
+          <TilingSprite texture={hair} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={[0, 256]} />
+          <TilingSprite texture={hair} height={64} width={64} scale={2} position={[34, 0]} tilePosition={[0, 192]} />
+          <TilingSprite texture={hair} height={64} width={64} scale={2} position={[107, 0]} tilePosition={[0, 0]} />
+          <TilingSprite texture={hair} height={64} width={64} scale={2} position={[175, 0]} tilePosition={[0, 128]} />
+        </Fragment>
+      )}
+    </Stage>
+  )
 }

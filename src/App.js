@@ -12,9 +12,9 @@ import hairPalettes from './palettes/hair.json'
 
 export default () => {
   const [ values, setValues ] = useState({
-    base: 'body/male/human',
+    base: 'male/human',
     skin: skinPalettes.Light,
-    hair: hairPalettes.Blonde,
+    hair: hairPalettes.Default,
     hair_style: 'bald'
   })
 
@@ -34,57 +34,55 @@ export default () => {
         <form>
           <div>
             <h3>Base Model</h3>
-            <Radio name='base' label='Human Male' value='body/male/human' onChange={onChange} checked={values.base === 'body/male/human'} />
-            <Radio name='base' label='Human Female' value='body/female/human' onChange={onChange} checked={values.base === 'body/female/human'} />
-            <Radio name='base' label='Orc Male' value='body/male/orc' onChange={onChange} checked={values.base === 'body/male/orc'} />
-            <Radio name='base' label='Orc Female' value='body/female/orc' onChange={onChange} checked={values.base === 'body/female/orc'} />
-            <Radio name='base' label='Skeleton' value='body/male/skeleton' onChange={onChange} checked={values.base === 'body/male/skeleton'} />
+            <Radio name='base' label='Human Male' value='male/human' onChange={onChange} checked={values.base === 'male/human'} />
+            <Radio name='base' label='Human Female' value='female/human' onChange={onChange} checked={values.base === 'female/human'} />
+            <Radio name='base' label='Orc Male' value='male/orc' onChange={onChange} checked={values.base === 'male/orc'} />
+            <Radio name='base' label='Orc Female' value='female/orc' onChange={onChange} checked={values.base === 'female/orc'} />
+            <Radio name='base' label='Skeleton' value='male/skeleton' onChange={onChange} checked={values.base === 'male/skeleton'} />
           </div>
-          {values.base !== 'body/male/skeleton' && (
-            <Fragment>
-              <div>
-                <h3>Skin Color</h3>
-                <ColorPalette name='skin' options={skinPalettes} value={values.skin} onChange={onChange} />
-              </div>
-              <div>
-                <h3>Hair</h3>
-                <Select name='hair_style' label='Style' value={values.hair_style} onChange={onChange}>
-                  <Option value='bald' label='Bald' />
-                  <Option value='bangs' label='Bangs' />
-                  <Option value='bangslong' label='Long Bangs' />
-                  <Option value='bangslong2' label='Long Bangs 2' />
-                  <Option value='bangsshort' label='Short Bangs' />
-                  <Option value='bedhead' label='Bead-head' />
-                  <Option value='bunches' label='Bunches' />
-                  <Option value='jewfro' label='Curly' />
-                  <Option value='long' label='Long' />
-                  <Option value='longhawk' label='Long Mohawk' />
-                  <Option value='longknot' label='Long Knot' />
-                  <Option value='loose' label='Loose' />
-                  <Option value='messy1' label='Messy' />
-                  <Option value='messy2' label='Messy 2' />
-                  <Option value='mohawk' label='Mohawk' />
-                  <Option value='page' label='Page' />
-                  <Option value='page2' label='Page 2' />
-                  <Option value='parted' label='Parted' />
-                  <Option value='pixie' label='Pixie' />
-                  <Option value='plain' label='Plain' />
-                  <Option value='ponytail' label='Ponytail' />
-                  <Option value='ponytail2' label='Ponytail 2' />
-                  <Option value='princess' label='Princess' />
-                  <Option value='shorthawk' label='Short Mohawk' />
-                  <Option value='shortknot' label='Short Knot' />
-                  <Option value='shoulderl' label='Shoulder Left' />
-                  <Option value='shoulderr' label='Shoulder Right' />
-                  <Option value='swoop' label='Swoop' />
-                  <Option value='unkempt' label='Unkempt' />
-                  <Option value='xlong' label='Extra Long' />
-                  <Option value='xlongknot' label='Extra Long Knot' />
-                </Select>
-                {values.hair_style !== 'bald' && <ColorPalette name='hair' options={hairPalettes} value={values.hair} onChange={onChange} /> }
-              </div>
-            </Fragment>
+          {values.base !== 'male/skeleton' && (
+            <div>
+              <h3>Skin</h3>
+              <ColorPalette name='skin' options={skinPalettes} value={values.skin} onChange={onChange} />
+            </div>
           )}
+          <div>
+            <h3>Hair</h3>
+            <Select name='hair_style' label='Style' value={values.hair_style} onChange={onChange}>
+              <Option value='bald' label='Bald' />
+              <Option value='bangs' label='Bangs' />
+              <Option value='bangslong' label='Long Bangs' />
+              <Option value='bangslong2' label='Long Bangs 2' />
+              <Option value='bangsshort' label='Short Bangs' />
+              <Option value='bedhead' label='Bead-head' />
+              <Option value='bunches' label='Bunches' />
+              <Option value='jewfro' label='Curly' />
+              <Option value='long' label='Long' />
+              <Option value='longhawk' label='Long Mohawk' />
+              <Option value='longknot' label='Long Knot' />
+              <Option value='loose' label='Loose' />
+              <Option value='messy1' label='Messy' />
+              <Option value='messy2' label='Messy 2' />
+              <Option value='mohawk' label='Mohawk' />
+              <Option value='page' label='Page' />
+              <Option value='page2' label='Page 2' />
+              <Option value='parted' label='Parted' />
+              <Option value='pixie' label='Pixie' />
+              <Option value='plain' label='Plain' />
+              <Option value='ponytail' label='Ponytail' />
+              <Option value='ponytail2' label='Ponytail 2' />
+              <Option value='princess' label='Princess' />
+              <Option value='shorthawk' label='Short Mohawk' />
+              <Option value='shortknot' label='Short Knot' />
+              <Option value='shoulderl' label='Shoulder Left' />
+              <Option value='shoulderr' label='Shoulder Right' />
+              <Option value='swoop' label='Swoop' />
+              <Option value='unkempt' label='Unkempt' />
+              <Option value='xlong' label='Extra Long' />
+              <Option value='xlongknot' label='Extra Long Knot' />
+            </Select>
+            {values.hair_style !== 'bald' && <ColorPalette name='hair' options={hairPalettes} value={values.hair} onChange={onChange} /> }
+          </div>
         </form>
       </main>
     </Fragment>

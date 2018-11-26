@@ -4,9 +4,11 @@
   "private": true,
   "homepage": "https://notnullgames.github.io/universal-sprites/",
   "dependencies": {
+    "@inlet/react-pixi": "^0.3.0",
     "chroma-js": "^1.4.0",
     "lodash": "^4.17.11",
     "muicss": "^0.9.41",
+    "pixi.js": "^4.8.2",
     "react": "^16.7.0-alpha.2",
     "react-dom": "^16.7.0-alpha.2"
   },
