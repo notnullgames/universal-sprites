@@ -15,6 +15,10 @@ mkdir('-p', 'src/palettes')
 mkdir('-p', 'src/images/formal/male')
 mkdir('-p', 'src/images/body/male')
 mkdir('-p', 'src/images/body/female')
+mkdir('-p', 'src/images/hair/female')
+mkdir('-p', 'src/images/hair/male')
+mkdir('-p', 'src/images/facial/female')
+mkdir('-p', 'src/images/facial/male')
 
 cp('-R', 'Universal-LPC-spritesheet/accessories', 'src/images/accessories')
 cp('-R', 'Universal-LPC-spritesheet/behind_body', 'src/images/behind_body')
@@ -30,6 +34,11 @@ cp('-R', 'Universal-LPC-spritesheet/weapons', 'src/images/weapons')
 cp('Universal-LPC-spritesheet/body/male/skeleton.png', 'src/images/body/male/skeleton.png')
 cp('Universal-LPC-spritesheet/body/male/light.png', 'src/images/body/male/human.png')
 cp('Universal-LPC-spritesheet/body/female/light.png', 'src/images/body/female/human.png')
+
+cp('Universal-LPC-spritesheet/hair/male/*.png', 'src/images/hair/male')
+cp('Universal-LPC-spritesheet/hair/female/*.png', 'src/images/hair/female')
+cp('Universal-LPC-spritesheet/facial/male/*.png', 'src/images/facial/male')
+cp('Universal-LPC-spritesheet/facial/female/*.png', 'src/images/facial/female')
 
 rm('src⁩/images⁩/formal⁩/male⁩/⁨formal_male_no_th-sh⁩/vest_w_shirt_cutout.png')
 

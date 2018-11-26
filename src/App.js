@@ -50,6 +50,36 @@ export default () => {
                 <h3>Hair</h3>
                 <Select name='hair_style' label='Style' value={values.hair_style} onChange={onChange}>
                   <Option value='bald' label='Bald' />
+                  <Option value='bangs' label='Bangs' />
+                  <Option value='bangslong' label='Long Bangs' />
+                  <Option value='bangslong2' label='Long Bangs 2' />
+                  <Option value='bangsshort' label='Short Bangs' />
+                  <Option value='bedhead' label='Bead-head' />
+                  <Option value='bunches' label='Bunches' />
+                  <Option value='jewfro' label='Curly' />
+                  <Option value='long' label='Long' />
+                  <Option value='longhawk' label='Long Mohawk' />
+                  <Option value='longknot' label='Long Knot' />
+                  <Option value='loose' label='Loose' />
+                  <Option value='messy1' label='Messy' />
+                  <Option value='messy2' label='Messy 2' />
+                  <Option value='mohawk' label='Mohawk' />
+                  <Option value='page' label='Page' />
+                  <Option value='page2' label='Page 2' />
+                  <Option value='parted' label='Parted' />
+                  <Option value='pixie' label='Pixie' />
+                  <Option value='plain' label='Plain' />
+                  <Option value='ponytail' label='Ponytail' />
+                  <Option value='ponytail2' label='Ponytail 2' />
+                  <Option value='princess' label='Princess' />
+                  <Option value='shorthawk' label='Short Mohawk' />
+                  <Option value='shortknot' label='Short Knot' />
+                  <Option value='shoulderl' label='Shoulder Left' />
+                  <Option value='shoulderr' label='Shoulder Right' />
+                  <Option value='swoop' label='Swoop' />
+                  <Option value='unkempt' label='Unkempt' />
+                  <Option value='xlong' label='Extra Long' />
+                  <Option value='xlongknot' label='Extra Long Knot' />
                 </Select>
                 {values.hair_style !== 'bald' && <ColorPalette name='hair' options={hairPalettes} value={values.hair} onChange={onChange} /> }
               </div>

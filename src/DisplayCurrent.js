@@ -5,6 +5,7 @@ import chroma from 'chroma-js'
 import { isEqual } from 'lodash'
 
 import skinPalettes from './palettes/skin.json'
+import hairPalettes from './palettes/hair.json'
 
 // TODO: animate sprites
 // TODO: do seperate head/face/body and allow all options
@@ -20,48 +21,68 @@ const findColor = (newColor, inPalette, outPalette, sharedPalette) => {
   }
 }
 
+// resolve promise functions, one after another
+const promiseSerial = funcs =>
+  funcs.reduce((promise, func) =>
+    promise.then(result => func().then(Array.prototype.concat.bind(result))),
+  Promise.resolve([]))
+
 // load a sprite onto the canvas
 // TODO: use a shader to improve performance?
-const drawSprite = (ctx, imageName, options = {}, palette) => {
+const drawSprite = (ctx, imageName, options = {}, palette, paletteIn) => {
   const { scale = 2, tileCoords = [1, 2], drawCoords = [0, 0], tileSize = [ 64, 64 ] } = options
-  let img = new Image()
-  img.src = require(`./images/${imageName}.png`)
-  img.onload = () => {
-    const [ sourceX, sourceY ] = tileCoords
-    const [ sourceWidth, sourceHeight ] = tileSize
-    const [ destX, destY ] = drawCoords
-    const destWidth = tileSize[0] * scale
-    const destHeight = tileSize[1] * scale
-    if (palette && !isEqual(skinPalettes.Light, palette)) {
-      const cnv = document.createElement('canvas')
-      cnv.width = sourceWidth
-      cnv.height = sourceHeight
-      const ctxTemp = cnv.getContext('2d')
-      ctxTemp.drawImage(img, sourceX * sourceWidth, sourceY * sourceHeight, sourceWidth, sourceHeight, 0, 0, sourceWidth, sourceHeight)
-      for (let x = 0; x < sourceWidth; x++) {
-        for (let y = 0; y < sourceHeight; y++) {
-          let [r, g, b, a] = ctxTemp.getImageData(x, y, 1, 1).data
-          a = a > 0 ? 1 : 0
-          ctxTemp.fillStyle = findColor([r, g, b, a], skinPalettes.Light, palette)
-          ctxTemp.fillRect(x, y, 1, 1)
+  return new Promise((resolve, reject) => {
+    let img = new Image()
+    img.src = require(`./images/${imageName}.png`)
+    img.onload = () => {
+      const [ sourceX, sourceY ] = tileCoords
+      const [ sourceWidth, sourceHeight ] = tileSize
+      const [ destX, destY ] = drawCoords
+      const destWidth = tileSize[0] * scale
+      const destHeight = tileSize[1] * scale
+      if (palette && !isEqual(paletteIn, palette)) {
+        const cnv = document.createElement('canvas')
+        cnv.width = sourceWidth
+        cnv.height = sourceHeight
+        const ctxTemp = cnv.getContext('2d')
+        ctxTemp.drawImage(img, sourceX * sourceWidth, sourceY * sourceHeight, sourceWidth, sourceHeight, 0, 0, sourceWidth, sourceHeight)
+        for (let x = 0; x < sourceWidth; x++) {
+          for (let y = 0; y < sourceHeight; y++) {
+            let [r, g, b, a] = ctxTemp.getImageData(x, y, 1, 1).data
+            a = a > 0 ? 1 : 0
+            ctxTemp.fillStyle = findColor([r, g, b, a], paletteIn, palette)
+            ctxTemp.fillRect(x, y, 1, 1)
+          }
         }
+        ctx.drawImage(ctxTemp.canvas, 0, 0, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight)
+      } else {
+        ctx.drawImage(img, sourceX * sourceWidth, sourceY * sourceHeight, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight)
       }
-      ctx.drawImage(ctxTemp.canvas, 0, 0, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight)
-    } else {
-      ctx.drawImage(img, sourceX * sourceWidth, sourceY * sourceHeight, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight)
+      resolve()
     }
-  }
+  })
 }
 
 export default ({ values, ...props }) => {
   const canvas = useRef(null)
   useEffect(() => {
+    const gender = (values.base.indexOf('female') !== -1) ? 'female' : 'male'
     const ctx = canvas.current.getContext('2d')
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-    drawSprite(ctx, values.base, { tileCoords: [0, 1], drawCoords: [-32, 0] }, values.skin)
-    drawSprite(ctx, values.base, { tileCoords: [0, 2], drawCoords: [34, 0] }, values.skin)
-    drawSprite(ctx, values.base, { tileCoords: [0, 4], drawCoords: [107, 0] }, values.skin)
-    drawSprite(ctx, values.base, { tileCoords: [0, 3], drawCoords: [175, 0] }, values.skin)
+    const imageList = []
+    imageList.push(() => drawSprite(ctx, values.base, { tileCoords: [0, 1], drawCoords: [-32, 0] }, values.skin, skinPalettes.Light))
+    imageList.push(() => drawSprite(ctx, values.base, { tileCoords: [0, 2], drawCoords: [34, 0] }, values.skin, skinPalettes.Light))
+    imageList.push(() => drawSprite(ctx, values.base, { tileCoords: [0, 4], drawCoords: [107, 0] }, values.skin, skinPalettes.Light))
+    imageList.push(() => drawSprite(ctx, values.base, { tileCoords: [0, 3], drawCoords: [175, 0] }, values.skin, skinPalettes.Light))
+
+    if (values.hair_style !== 'bald') {
+      const hairImg = `hair/${gender}/${values.hair_style}`
+      imageList.push(() => drawSprite(ctx, hairImg, { tileCoords: [0, 1], drawCoords: [-32, 0] }, values.hair, hairPalettes.Default))
+      imageList.push(() => drawSprite(ctx, hairImg, { tileCoords: [0, 2], drawCoords: [34, 0] }, values.hair, hairPalettes.Default))
+      imageList.push(() => drawSprite(ctx, hairImg, { tileCoords: [0, 4], drawCoords: [107, 0] }, values.hair, hairPalettes.Default))
+      imageList.push(() => drawSprite(ctx, hairImg, { tileCoords: [0, 3], drawCoords: [175, 0] }, values.hair, hairPalettes.Default))
+    }
+    promiseSerial(imageList)
   })
   return (<canvas {...props} ref={canvas} />)
 }
