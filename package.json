@@ -5,6 +5,7 @@
   "homepage": "https://notnullgames.github.io/universal-sprites/",
   "dependencies": {
     "@inlet/react-pixi": "^0.3.0",
+    "@pixi/filter-multi-color-replace": "^2.5.0",
     "chroma-js": "^1.4.0",
     "lodash": "^4.17.11",
     "muicss": "^0.9.41",
