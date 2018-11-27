@@ -20,7 +20,6 @@ const defaultHairPalette = colorMap(hairPalettes.Default)
 // TODO: generate full spritesheet, or composite-sheets
 // TODO: handle gendered clothes better
 // TODO: handle color-palettes in clothes
-// TODO: figure out basic adjustments of male->female & female->male, and only include one set
 
 export default ({ values, ...props }) => {
   const gender = values.base.indexOf('female') === -1 ? 'male' : 'female'
@@ -47,20 +46,20 @@ export default ({ values, ...props }) => {
           <TilingSprite texture={hair} height={64} width={64} scale={2} position={[175, 0]} tilePosition={[0, 128]} filters={[hairShader]} />
         </Fragment>
       )}
-      {shirt && (
-        <Fragment>
-          <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={[0, 256]} />
-          <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[34, 0]} tilePosition={[0, 192]} />
-          <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[107, 0]} tilePosition={[0, 0]} />
-          <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[175, 0]} tilePosition={[0, 128]} />
-        </Fragment>
-      )}
       {legs && (
         <Fragment>
           <TilingSprite texture={legs} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={[0, 256]} />
           <TilingSprite texture={legs} height={64} width={64} scale={2} position={[34, 0]} tilePosition={[0, 192]} />
           <TilingSprite texture={legs} height={64} width={64} scale={2} position={[107, 0]} tilePosition={[0, 0]} />
           <TilingSprite texture={legs} height={64} width={64} scale={2} position={[175, 0]} tilePosition={[0, 128]} />
+        </Fragment>
+      )}
+      {shirt && (
+        <Fragment>
+          <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={[0, 256]} />
+          <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[34, 0]} tilePosition={[0, 192]} />
+          <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[107, 0]} tilePosition={[0, 0]} />
+          <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[175, 0]} tilePosition={[0, 128]} />
         </Fragment>
       )}
       {back && (

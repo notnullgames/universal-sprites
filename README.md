@@ -1,5 +1,7 @@
 # universal-sprites
 
+![example](./example.png)
+
 This will eventually be a javascript-based version of tools and an editor, sort of like [Universal-LPC-Spritesheet-Character-Generator](http://gaurav.munjal.us/Universal-LPC-Spritesheet-Character-Generator/).
 
 It's deployed [here](https://notnullgames.github.io/universal-sprites/). For now, this is a work-in-progress, but I hope that eventually a user can set custom skin-color, set head-shape, set stout/voluptuos, and have all accessories and stuff fit.
