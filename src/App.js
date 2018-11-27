@@ -33,6 +33,8 @@ export default () => {
         </Appbar>
       </header>
       <main>
+        <p>All art is dual licensed: GPL3 and CC-BY-SA3</p>
+        <a href="https://github.com/notnullgames/universal-sprites"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
         <DisplayCurrent values={values} width={275} height={130} />
         <form>
           <div>
