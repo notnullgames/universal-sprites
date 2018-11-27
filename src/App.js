@@ -22,15 +22,8 @@ export default () => {
   })
 
   const onChange = e => {
-    const fixes = {}
-    if (e.target.name === 'base') {
-      fixes.shirt = 'none'
-      fixes.legs = 'none'
-    }
-    setValues({ ...values, [e.target.name]: e.target.value, ...fixes })
+    setValues({ ...values, [e.target.name]: e.target.value })
   }
-
-  const gender = values.base.indexOf('female') === -1 ? 'male' : 'female'
 
   return (
     <Fragment>
@@ -40,7 +33,7 @@ export default () => {
         </Appbar>
       </header>
       <main>
-        <DisplayCurrent values={values} width={275} height={150} />
+        <DisplayCurrent values={values} width={275} height={130} />
         <form>
           <div>
             <h3>Base Model</h3>
@@ -114,8 +107,8 @@ export default () => {
               <Option value='tunics/female/maroon_tunic' label='Maroon Tunic' />
               <Option value='tunics/female/teal_tunic' label='Teal Tunic' />
               <Option value='tunics/female/white_tunic' label='White Tunic' />
-              <Option value={`chain/mail_${gender}`} label='Chainmail' />
-              <Option value={`chain/tabard/jacket_${gender}`} label='Chain Tabard Jacket' />
+              <Option value='chain/mail_GENDER' label='Chainmail' />
+              <Option value='chain/tabard/jacket_GENDER' label='Chain Tabard Jacket' />
               <Option value='corset_female/corset_black' label='Black Corset' />
               <Option value='corset_female/corset_brown' label='Brown Corset' />
               <Option value='corset_female/corset_red' label='Red Corset' />
@@ -172,13 +165,13 @@ export default () => {
             <h3>Legs</h3>
             <Select name='legs' label='Style' value={values.legs} onChange={onChange}>
               <Option value='none' label='None' />
-              <Option value={`armor/${gender}/golden_greaves_${gender}`} label='Golden Greaves' />
-              <Option value={`armor/${gender}/metal_pants_${gender}`} label='Metal' />
-              <Option value={`pants/${gender}/magenta_pants_${gender}`} label='Magenta' />
-              <Option value={`pants/${gender}/white_pants_${gender}`} label='White' />
-              <Option value={`pants/${gender}/red_pants_${gender}`} label='Red' />
-              <Option value={`pants/${gender}/teal_pants_${gender}`} label='Teal' />
-              <Option value={`skirt/${gender}/robe_skirt_${gender}`} label='Robe / Skirt' />
+              <Option value='armor/GENDER/golden_greaves_GENDER' label='Golden Greaves' />
+              <Option value='armor/GENDER/metal_pants_GENDER' label='Metal' />
+              <Option value='pants/GENDER/magenta_pants_GENDER' label='Magenta' />
+              <Option value='pants/GENDER/white_pants_GENDER' label='White' />
+              <Option value='pants/GENDER/red_pants_GENDER' label='Red' />
+              <Option value='pants/GENDER/teal_pants_GENDER' label='Teal' />
+              <Option value='skirt/male/robe_skirt_male' label='Robe / Skirt' />
             </Select>
           </div>
         </form>

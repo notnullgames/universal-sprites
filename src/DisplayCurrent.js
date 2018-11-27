@@ -1,75 +1,85 @@
-import React, { Fragment } from 'react'
-import * as PIXI from 'pixi.js'
-import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace'
+import React, { Fragment, useState, useEffect } from 'react'
 import { TilingSprite, Stage } from '@inlet/react-pixi'
-import chroma from 'chroma-js'
 
-import skinPalettes from './palettes/skin.json'
-import hairPalettes from './palettes/hair.json'
+import Option from 'muicss/lib/react/option'
+import Select from 'muicss/lib/react/select'
+import Button from 'muicss/lib/react/button'
 
-// generate a palette-swapping shader from 2 palettes (array of arrays RGB)
-const swapPaletteFrag = (paletteIn, paletteOut) => new MultiColorReplaceFilter(paletteIn.map((v, i) => [v, paletteOut[i]]), 0.18)
-
-// get array of numeric colors for array of hex-colors
-const colorMap = palette => palette.map(c => chroma(c).num())
-
-// pre-compute replacement palettes
-const lightSkinPalette = colorMap(skinPalettes.Light)
-const defaultHairPalette = colorMap(hairPalettes.Default)
+import { getTextures, downloadComposite, downloadSeperate } from './spritesheet'
 
 // TODO: generate full spritesheet, or composite-sheets
 // TODO: handle gendered clothes better
 // TODO: handle color-palettes in clothes
 
 export default ({ values, ...props }) => {
-  const gender = values.base.indexOf('female') === -1 ? 'male' : 'female'
-  const body = PIXI.Texture.fromImage(require(`./images/body/${values.base}.png`))
-  const hair = values.hair_style !== 'bald' && PIXI.Texture.fromImage(require(`./images/hair/${gender}/${values.hair_style}.png`))
-  const shirt = values.shirt !== 'none' && PIXI.Texture.fromImage(require(`./images/torso/${values.shirt}.png`))
-  const back = values.back !== 'none' && PIXI.Texture.fromImage(require(`./images/torso/back/${values.back}.png`))
-  const legs = values.legs !== 'none' && PIXI.Texture.fromImage(require(`./images/legs/${values.legs}.png`))
-  const bodyShader = values.base !== 'male/skeleton' && swapPaletteFrag(lightSkinPalette, colorMap(values.skin))
-  const hairShader = hair && swapPaletteFrag(defaultHairPalette, colorMap(values.hair))
+  const [position, setPosition] = useState(0)
+  const [animation, setAnimation] = useState([9, 10, 8, 11])
+
+  let interval
+  useEffect(() => {
+    let x = 0
+    interval = setInterval(() => {
+      x++
+      setPosition(x % 6)
+    }, 150)
+  }, () => clearInterval(interval))
+
+  const { body, hair, shirt, back, legs, bodyShader, hairShader } = getTextures(values)
+  const coords = animation.map(n => [832 - (position * 64), 1344 - (n * 64)])
   return (
-    <Stage {...props} options={{ backgroundColor: 0xFFFFFF }} >
-      <Fragment>
-        <TilingSprite texture={body} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={[0, 256]} filters={[bodyShader]} />
-        <TilingSprite texture={body} height={64} width={64} scale={2} position={[34, 0]} tilePosition={[0, 192]} filters={[bodyShader]} />
-        <TilingSprite texture={body} height={64} width={64} scale={2} position={[107, 0]} tilePosition={[0, 0]} filters={[bodyShader]} />
-        <TilingSprite texture={body} height={64} width={64} scale={2} position={[175, 0]} tilePosition={[0, 128]} filters={[bodyShader]} />
-      </Fragment>
-      {hair && (
+    <Fragment>
+      <Stage {...props} options={{ backgroundColor: 0xFFFFFF }} >
         <Fragment>
-          <TilingSprite texture={hair} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={[0, 256]} filters={[hairShader]} />
-          <TilingSprite texture={hair} height={64} width={64} scale={2} position={[34, 0]} tilePosition={[0, 192]} filters={[hairShader]} />
-          <TilingSprite texture={hair} height={64} width={64} scale={2} position={[107, 0]} tilePosition={[0, 0]} filters={[hairShader]} />
-          <TilingSprite texture={hair} height={64} width={64} scale={2} position={[175, 0]} tilePosition={[0, 128]} filters={[hairShader]} />
+          <TilingSprite texture={body} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={coords[0]} filters={[bodyShader]} />
+          <TilingSprite texture={body} height={64} width={64} scale={2} position={[34, 0]} tilePosition={coords[1]} filters={[bodyShader]} />
+          <TilingSprite texture={body} height={64} width={64} scale={2} position={[107, 0]} tilePosition={coords[2]} filters={[bodyShader]} />
+          <TilingSprite texture={body} height={64} width={64} scale={2} position={[175, 0]} tilePosition={coords[3]} filters={[bodyShader]} />
         </Fragment>
-      )}
-      {legs && (
-        <Fragment>
-          <TilingSprite texture={legs} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={[0, 256]} />
-          <TilingSprite texture={legs} height={64} width={64} scale={2} position={[34, 0]} tilePosition={[0, 192]} />
-          <TilingSprite texture={legs} height={64} width={64} scale={2} position={[107, 0]} tilePosition={[0, 0]} />
-          <TilingSprite texture={legs} height={64} width={64} scale={2} position={[175, 0]} tilePosition={[0, 128]} />
-        </Fragment>
-      )}
-      {shirt && (
-        <Fragment>
-          <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={[0, 256]} />
-          <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[34, 0]} tilePosition={[0, 192]} />
-          <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[107, 0]} tilePosition={[0, 0]} />
-          <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[175, 0]} tilePosition={[0, 128]} />
-        </Fragment>
-      )}
-      {back && (
-        <Fragment>
-          <TilingSprite texture={back} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={[0, 256]} />
-          <TilingSprite texture={back} height={64} width={64} scale={2} position={[34, 0]} tilePosition={[0, 192]} />
-          <TilingSprite texture={back} height={64} width={64} scale={2} position={[107, 0]} tilePosition={[0, 0]} />
-          <TilingSprite texture={back} height={64} width={64} scale={2} position={[175, 0]} tilePosition={[0, 128]} />
-        </Fragment>
-      )}
-    </Stage>
+        {hair && (
+          <Fragment>
+            <TilingSprite texture={hair} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={coords[0]} filters={[hairShader]} />
+            <TilingSprite texture={hair} height={64} width={64} scale={2} position={[34, 0]} tilePosition={coords[1]} filters={[hairShader]} />
+            <TilingSprite texture={hair} height={64} width={64} scale={2} position={[107, 0]} tilePosition={coords[2]} filters={[hairShader]} />
+            <TilingSprite texture={hair} height={64} width={64} scale={2} position={[175, 0]} tilePosition={coords[3]} filters={[hairShader]} />
+          </Fragment>
+        )}
+        {legs && (
+          <Fragment>
+            <TilingSprite texture={legs} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={coords[0]} />
+            <TilingSprite texture={legs} height={64} width={64} scale={2} position={[34, 0]} tilePosition={coords[1]} />
+            <TilingSprite texture={legs} height={64} width={64} scale={2} position={[107, 0]} tilePosition={coords[2]} />
+            <TilingSprite texture={legs} height={64} width={64} scale={2} position={[175, 0]} tilePosition={coords[3]} />
+          </Fragment>
+        )}
+        {shirt && (
+          <Fragment>
+            <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={coords[0]} />
+            <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[34, 0]} tilePosition={coords[1]} />
+            <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[107, 0]} tilePosition={coords[2]} />
+            <TilingSprite texture={shirt} height={64} width={64} scale={2} position={[175, 0]} tilePosition={coords[3]} />
+          </Fragment>
+        )}
+        {back && (
+          <Fragment>
+            <TilingSprite texture={back} height={64} width={64} scale={2} position={[-32, 0]} tilePosition={coords[0]} />
+            <TilingSprite texture={back} height={64} width={64} scale={2} position={[34, 0]} tilePosition={coords[1]} />
+            <TilingSprite texture={back} height={64} width={64} scale={2} position={[107, 0]} tilePosition={coords[2]} />
+            <TilingSprite texture={back} height={64} width={64} scale={2} position={[175, 0]} tilePosition={coords[3]} />
+          </Fragment>
+        )}
+      </Stage>
+      {/* <div style={{ display: 'flex', width: '100%' }}>
+        <Button onClick={e => downloadComposite(values)} style={{ flex: 1 }} color='primary'>Composite Spritesheet</Button>
+        <Button onClick={e => downloadSeperate(values)} style={{ flex: 1 }} color='accent'>Seperate Spritesheets</Button>
+      </div> */}
+      <Select name='animation' label='Animation' value={animation.join('|')} onChange={e => setAnimation(e.target.value.split('|'))}>
+        <Option value='9|10|8|11' label='Walking' />
+        <Option value='1|2|0|3' label='Spell' />
+        <Option value='5|6|4|7' label='Thrust' />
+        <Option value='13|14|12|15' label='Slash' />
+        <Option value='17|18|16|19' label='Shoot' />
+        <Option value='21|22|20|23' label='Hurt' />
+      </Select>
+    </Fragment>
   )
 }
