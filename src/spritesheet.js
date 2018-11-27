@@ -28,8 +28,29 @@ export const getTextures = memoize(values => {
   return { gender, body, hair, shirt, back, legs, bodyShader, hairShader }
 })
 
-export const downloadComposite = values => {
-
+export const downloadComposite = values => e => {
+  const renderer = new PIXI.WebGLRenderer(832, 1344, { transparent: true, preserveDrawingBuffer: true })
+  const stage = new PIXI.Container()
+  const { body, hair, shirt, back, legs, bodyShader, hairShader } = getTextures(values)
+  const bodySprite = new PIXI.Sprite(body)
+  bodySprite.filters = [bodyShader]
+  stage.addChild(bodySprite)
+  if (hair) {
+    const hairSprite = new PIXI.Sprite(hair)
+    hairSprite.filters = [hairShader]
+    stage.addChild(hairSprite)
+  }
+  if (legs) {
+    stage.addChild(new PIXI.Sprite(legs))
+  }
+  if (shirt) {
+    stage.addChild(new PIXI.Sprite(shirt))
+  }
+  if (back) {
+    stage.addChild(new PIXI.Sprite(back))
+  }
+  renderer.render(stage)
+  e.target.href = renderer.view.toDataURL('image/png')
 }
 
 export const downloadSeperate = values => {

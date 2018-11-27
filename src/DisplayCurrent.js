@@ -68,10 +68,9 @@ export default ({ values, ...props }) => {
           </Fragment>
         )}
       </Stage>
-      {/* <div style={{ display: 'flex', width: '100%' }}>
-        <Button onClick={e => downloadComposite(values)} style={{ flex: 1 }} color='primary'>Composite Spritesheet</Button>
-        <Button onClick={e => downloadSeperate(values)} style={{ flex: 1 }} color='accent'>Seperate Spritesheets</Button>
-      </div> */}
+      <div>
+        <a download='sprites.png' className='mui-btn mui-btn--primary' onClick={downloadComposite(values)}>Download Spritesheet</a>
+      </div>
       <Select name='animation' label='Animation' value={animation.join('|')} onChange={e => setAnimation(e.target.value.split('|'))}>
         <Option value='9|10|8|11' label='Walking' />
         <Option value='1|2|0|3' label='Spell' />
