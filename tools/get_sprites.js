@@ -47,7 +47,7 @@ const transposeImagePalette = (inName, outName, inPalette, outPalette, sharedPal
 const run = async () => {
   // turn orcs into light-human palette
   await transposeImagePalette(
-    `${__dirname}/../Universal-LPC-spritesheet/body/male/orc.png`,
+    `${__dirname}/orc_male.png`,
     `${__dirname}/../src/images/body/male/orc.png`,
     skin.Orc,
     skin.Light,
@@ -55,7 +55,7 @@ const run = async () => {
   )
 
   await transposeImagePalette(
-    `${__dirname}/../Universal-LPC-spritesheet/body/female/orc.png`,
+    `${__dirname}/orc_female.png`,
     `${__dirname}/../src/images/body/female/orc.png`,
     skin.Orc,
     skin.Light,

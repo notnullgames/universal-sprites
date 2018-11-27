@@ -40,7 +40,7 @@ cp('Universal-LPC-spritesheet/hair/female/*.png', 'src/images/hair/female')
 cp('Universal-LPC-spritesheet/facial/male/*.png', 'src/images/facial/male')
 cp('Universal-LPC-spritesheet/facial/female/*.png', 'src/images/facial/female')
 
-rm('src⁩/images⁩/formal⁩/male⁩/⁨formal_male_no_th-sh⁩/vest_w_shirt_cutout.png')
+// rm('src⁩/images⁩/formal⁩/male⁩/⁨formal_male_no_th-sh⁩/vest_w_shirt_cutout.png')
 
 exec('node tools/get_palettes')
 exec('node tools/get_sprites')
