@@ -22,7 +22,7 @@ It's a work in progress, but it's already able to make combinations of skin/clot
 
 ## I could use some help!
 
-There is a lot that needs to be done art-wise, to make the base spritesheets complete. There should be every pose for every item, and also both sexes.  In may cases it is copy & paste from another frame, but in a lot of cases I think it will require hand-editing.
+There is a lot that needs to be done art-wise, to make the base spritesheets complete. There should be every pose for every item, and also both sexes.  In may cases it is copy & paste from another frame, but in a lot of cases I think it will require hand-editing. Eventually I will have a video-link of how I do the whole thing (load base character into Gimp, add item layer, copy/paste, mess with palettes, etc.)
 
 ## source images
 
