@@ -57,7 +57,7 @@ const getSharedPalette = (src, palette) => {
 const run = async () => {
   const palettes = {
     skin: zipObject(
-      ['Light', 'Tan', 'Tan 2', 'Dark', 'Dark 2', 'Dark Elf', 'Dark Elf 2', 'Albino', 'Albino 2', 'Orc', 'Red Orc'],
+      ['Light', 'Tan', 'Tan 2', 'Dark', 'Dark 2', 'Dark Elf', 'Dark Elf 2', 'Orange', 'Demon', 'Orc', 'Dark Orc'],
       await getPalette(`${__dirname}/palette_skin.png`)
     ),
     hair: zipObject(

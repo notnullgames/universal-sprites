@@ -64,7 +64,7 @@ export default ({ values, ...props }) => {
         )}
       </Stage>
       <div>
-        <a download='sprites.png' className='mui-btn mui-btn--primary' onClick={downloadComposite(values)}>Download Spritesheet</a>
+        <a href='sprites.png' download='sprites.png' className='mui-btn mui-btn--primary' onClick={downloadComposite(values)}>Download Spritesheet</a>
       </div>
       <Select name='animation' label='Animation' value={animation.join('|')} onChange={e => setAnimation(e.target.value.split('|'))}>
         <Option value='9|10|8|11' label='Walking' />
