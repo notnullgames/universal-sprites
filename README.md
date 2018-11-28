@@ -15,7 +15,7 @@ It's deployed [here](https://notnullgames.github.io/universal-sprites/). For now
 * Use an indexed pallette that can be swapped, for things that have colors.
 * Make female/male versions of the clothes, which is sometimes just placement (there is some ruby code in [Universal-LPC-spritesheet repo](https://github.com/jrconway3/Universal-LPC-spritesheet) to locate a reference point) but also often actually different (will probly need to flatten the chest on some items, and remove bounce.)
 * Remove the concept of sex from the drawings, like maybe "stout" vs "voluptuos" for the chest area, and just allow mix & match of different areas (Nosferatu from current female-orc head, grey skin color, and current human-male body, for example.) 
-* Support differnt body-types, too like "skinny" and "chubby", but I think this will have to be done in shader-space (start with current sprites, and get them as close as I can to complete & matching up, then use GLSL shader to stretch things.)
+* Support differnt body-types, too like skinny/chubby/short/tall, but I think this will have to be done in shader-space (start with current sprites, and get them as close as I can to complete & matching up, then use GLSL shader to stretch things.)
 * automate more in scripts, like palette-reduction, so source images just be downloaded and processed to fit
 
 It's a work in progress, but it's already able to make combinations of skin/clotes/hair that the other editor could not, so I think it's useful, even in this early stage.
