@@ -20,7 +20,8 @@ export default () => {
     back: 'none',
     legs: 'none',
     beard_style: 'bald',
-    beard: hairPalettes.Default
+    beard: hairPalettes.Default,
+    shoes: 'barefoot'
   })
 
   const onChange = e => {
@@ -190,6 +191,25 @@ export default () => {
               <Option value='legs/pants/GENDER/teal_pants_GENDER' label='Teal' />
               <Option value='legs/skirt/male/robe_skirt_male' label='Robe / Skirt' />
               <Option value='formal/male/formal_male_no_th-sh/pants' label='Formal' />
+            </Select>
+          </div>
+
+          <div>
+            <h3>Footwear</h3>
+            <Select name='shoes' label='Style' value={values.shoes} onChange={onChange}>
+              <Option value='barefoot' label='Barefoot' />
+              <Option value='feet/armor/GENDER/golden_boots_GENDER' label='Golden Boots' />
+              <Option value='feet/armor/GENDER/metal_boots_GENDER' label='Metal Boots' />
+              <Option value='feet/boots/GENDER/brown_longboots_GENDER' label='Brown Long Boots' />
+              <Option value='feet/boots/GENDER/maroon_longboots_GENDER' label='Maroon Long Boots' />
+              <Option value='feet/ghillies_female_no_th-sh' label='Ghillies' />
+              <Option value='feet/shoes/GENDER/black_shoes_GENDER' label='Black Shoes' />
+              <Option value='feet/shoes/GENDER/brown_shoes_GENDER' label='Brown Shoes' />
+              <Option value='feet/shoes/GENDER/maroon_shoes_GENDER' label='Maroon Shoes' />
+              <Option value='feet/slippers_female/black' label='Black Slippers' />
+              <Option value='feet/slippers_female/brown' label='Brown Slippers' />
+              <Option value='feet/slippers_female/gray' label='Grey Slippers' />
+              <Option value='feet/slippers_female/white' label='White Slippers' />
             </Select>
           </div>
         </form>

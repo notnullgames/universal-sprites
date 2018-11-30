@@ -28,15 +28,16 @@ export const getTextures = memoize(values => {
   const shirt = values.shirt !== 'none' && PIXI.Texture.fromImage(require(`./images/${values.shirt.replace(/GENDER/g, gender)}.png`))
   const back = values.back !== 'none' && PIXI.Texture.fromImage(require(`./images/${values.back}.png`))
   const legs = values.legs !== 'none' && PIXI.Texture.fromImage(require(`./images/${values.legs.replace(/GENDER/g, gender)}.png`))
+  const shoes = values.shoes !== 'barefoot' && PIXI.Texture.fromImage(require(`./images/${values.shoes.replace(/GENDER/g, gender)}.png`))
   const bodyShader = values.base !== 'male/skeleton' && swapPaletteFrag(lightSkinPalette, colorMap(values.skin))
   const hairShader = hair && swapPaletteFrag(defaultHairPalette, colorMap(values.hair))
   const beardShader = beard && swapPaletteFrag(defaultHairPalette, colorMap(values.beard))
-  return { gender, body, hair, beard, shirt, back, legs, bodyShader, hairShader, beardShader }
+  return { shoes, gender, body, hair, beard, shirt, back, legs, bodyShader, hairShader, beardShader }
 })
 
 // core drawing function that combines all layers into a full spritesheet
 export const createComposite = (values) => {
-  const { body, hair, shirt, back, legs, bodyShader, hairShader, beard, beardShader } = getTextures(values)
+  const { body, hair, shirt, back, legs, bodyShader, hairShader, beard, beardShader, shoes } = getTextures(values)
   const stage = new PIXI.Container()
   const bodySprite = new PIXI.Sprite(body)
   bodySprite.filters = [bodyShader]
@@ -56,6 +57,9 @@ export const createComposite = (values) => {
   }
   if (shirt) {
     stage.addChild(new PIXI.Sprite(shirt))
+  }
+  if (shoes) {
+    stage.addChild(new PIXI.Sprite(shoes))
   }
   if (back) {
     stage.addChild(new PIXI.Sprite(back))
