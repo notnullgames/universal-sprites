@@ -22,7 +22,7 @@ export default ({ values, ...props }) => {
   const { body, hair, shirt, back, legs, bodyShader, hairShader, beard, beardShader, shoes } = getTextures(values)
   const coords = animation.map(n => [832 - (position * 64), 1344 - (n * 64)])
   return (
-    <Fragment>
+    <div>
       <Stage {...props} options={{ backgroundColor: 0xFFFFFF }} >
         <Fragment>
           <TilingSprite texture={body} height={64} width={64} scale={2} position={[-32, -20]} tilePosition={coords[0]} filters={[bodyShader]} />
@@ -90,6 +90,6 @@ export default ({ values, ...props }) => {
         <Option value='17|18|16|19' label='Shoot' />
         <Option value='21|22|20|23' label='Hurt' />
       </Select>
-    </Fragment>
+    </div>
   )
 }

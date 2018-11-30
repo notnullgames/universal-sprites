@@ -1,9 +1,5 @@
 /* global app styles go in here */
 
-main {
-  padding: 0 20px;
-}
-
 .mui-appbar  {
   padding: 10px;
   display: flex;
@@ -28,4 +24,22 @@ input[type=color] {
   margin: 0;
   border: none;
   outline: transparent;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+form {
+  overflow: auto;
+  flex: 1;
+  padding: 20px;
 }
