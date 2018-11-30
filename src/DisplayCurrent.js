@@ -19,7 +19,7 @@ export default ({ values, ...props }) => {
     }, 150)
   }, () => clearInterval(interval))
 
-  const { body, hair, shirt, back, legs, bodyShader, hairShader } = getTextures(values)
+  const { body, hair, shirt, back, legs, bodyShader, hairShader, beard, beardShader } = getTextures(values)
   const coords = animation.map(n => [832 - (position * 64), 1344 - (n * 64)])
   return (
     <Fragment>
@@ -36,6 +36,14 @@ export default ({ values, ...props }) => {
             <TilingSprite texture={hair} height={64} width={64} scale={2} position={[34, -20]} tilePosition={coords[1]} filters={[hairShader]} />
             <TilingSprite texture={hair} height={64} width={64} scale={2} position={[107, -20]} tilePosition={coords[2]} filters={[hairShader]} />
             <TilingSprite texture={hair} height={64} width={64} scale={2} position={[175, -20]} tilePosition={coords[3]} filters={[hairShader]} />
+          </Fragment>
+        )}
+        {beard && (
+          <Fragment>
+            <TilingSprite texture={beard} height={64} width={64} scale={2} position={[-32, -20]} tilePosition={coords[0]} filters={[beardShader]} />
+            <TilingSprite texture={beard} height={64} width={64} scale={2} position={[34, -20]} tilePosition={coords[1]} filters={[beardShader]} />
+            <TilingSprite texture={beard} height={64} width={64} scale={2} position={[107, -20]} tilePosition={coords[2]} filters={[beardShader]} />
+            <TilingSprite texture={beard} height={64} width={64} scale={2} position={[175, -20]} tilePosition={coords[3]} filters={[beardShader]} />
           </Fragment>
         )}
         {legs && (

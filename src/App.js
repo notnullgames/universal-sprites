@@ -18,7 +18,9 @@ export default () => {
     hair_style: 'bald',
     shirt: 'none',
     back: 'none',
-    legs: 'none'
+    legs: 'none',
+    beard_style: 'bald',
+    beard: hairPalettes.Default
   })
 
   const onChange = e => {
@@ -51,6 +53,18 @@ export default () => {
               <ColorPalette name='skin' options={skinPalettes} value={values.skin} onChange={onChange} />
             </div>
           )}
+          <div>
+            <h3>Facial Hair</h3>
+            <Select name='beard_style' label='Style' value={values.beard_style} onChange={onChange}>
+              <Option value='bald' label='Bald' />
+              <Option value='beard' label='Beard' />
+              <Option value='bigstache' label='Big Stache' />
+              <Option value='fiveoclock' label="5 O'clock Shadow" />
+              <Option value='frenchstache' label='French Stache' />
+              <Option value='mustache' label='Mustache' />
+            </Select>
+            {values.beard_style !== 'bald' && <ColorPalette name='beard' options={hairPalettes} value={values.beard} onChange={onChange} /> }
+          </div>
           <div>
             <h3>Hair</h3>
             <Select name='hair_style' label='Style' value={values.hair_style} onChange={onChange}>

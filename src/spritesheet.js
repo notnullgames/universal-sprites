@@ -24,17 +24,19 @@ export const getTextures = memoize(values => {
   const gender = values.base.indexOf('female') === -1 ? 'male' : 'female'
   const body = PIXI.Texture.fromImage(require(`./images/body/${values.base}.png`))
   const hair = values.hair_style !== 'bald' && PIXI.Texture.fromImage(require(`./images/hair/${gender}/${values.hair_style}.png`))
+  const beard = values.beard_style !== 'bald' && PIXI.Texture.fromImage(require(`./images/facial/${gender}/${values.beard_style}.png`))
   const shirt = values.shirt !== 'none' && PIXI.Texture.fromImage(require(`./images/${values.shirt.replace(/GENDER/g, gender)}.png`))
   const back = values.back !== 'none' && PIXI.Texture.fromImage(require(`./images/${values.back}.png`))
   const legs = values.legs !== 'none' && PIXI.Texture.fromImage(require(`./images/${values.legs.replace(/GENDER/g, gender)}.png`))
   const bodyShader = values.base !== 'male/skeleton' && swapPaletteFrag(lightSkinPalette, colorMap(values.skin))
   const hairShader = hair && swapPaletteFrag(defaultHairPalette, colorMap(values.hair))
-  return { gender, body, hair, shirt, back, legs, bodyShader, hairShader }
+  const beardShader = beard && swapPaletteFrag(defaultHairPalette, colorMap(values.beard))
+  return { gender, body, hair, beard, shirt, back, legs, bodyShader, hairShader, beardShader }
 })
 
 // core drawing function that combines all layers into a full spritesheet
 export const createComposite = (values) => {
-  const { body, hair, shirt, back, legs, bodyShader, hairShader } = getTextures(values)
+  const { body, hair, shirt, back, legs, bodyShader, hairShader, beard, beardShader } = getTextures(values)
   const stage = new PIXI.Container()
   const bodySprite = new PIXI.Sprite(body)
   bodySprite.filters = [bodyShader]
@@ -43,6 +45,11 @@ export const createComposite = (values) => {
     const hairSprite = new PIXI.Sprite(hair)
     hairSprite.filters = [hairShader]
     stage.addChild(hairSprite)
+  }
+  if (beard) {
+    const beardSprite = new PIXI.Sprite(beard)
+    beardSprite.filters = [beardShader]
+    stage.addChild(beardSprite)
   }
   if (legs) {
     stage.addChild(new PIXI.Sprite(legs))
