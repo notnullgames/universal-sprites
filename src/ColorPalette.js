@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import Option from 'muicss/lib/react/option'
 import Select from 'muicss/lib/react/select'
 
-export default ({ options, value, name, onChange }) => {
+export default ({ options, value, name, onChange, label = 'Color' }) => {
   const [ colors, setColors ] = useState(value)
-  const [ label, setLabel ] = useState(false)
+  const [ palette, setPalette ] = useState(false)
 
   const onColorChange = e => {
-    setLabel('Custom')
+    setPalette('Custom')
     const value = colors.slice()
     value[e.target.name.replace('color', '')] = e.target.value
     setColors(value)
@@ -20,7 +20,7 @@ export default ({ options, value, name, onChange }) => {
   }
 
   const onChangePreset = e => {
-    setLabel(e.target.value)
+    setPalette(e.target.value)
     if (e.target.value !== 'Custom') {
       setColors(options[e.target.value])
       onChange({
@@ -33,7 +33,7 @@ export default ({ options, value, name, onChange }) => {
   }
   return (
     <div>
-      <Select name={name} label='Color' onChange={onChangePreset} value={label}>
+      <Select name={name} label={label} onChange={onChangePreset} value={palette}>
         {Object.keys(options).map(o => <Option key={o} value={o} label={o} />)}
         <Option value='Custom' label='Custom' />
       </Select>

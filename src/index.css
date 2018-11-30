@@ -26,20 +26,15 @@ input[type=color] {
   outline: transparent;
 }
 
-#root {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
 main {
-  display: flex;
-  flex-direction: column;
   margin: 10px;
 }
 
-form {
-  overflow: auto;
+article {
+  display: flex;
+}
+
+article > * {
   flex: 1;
-  padding: 20px;
+  padding: 10px;
 }
