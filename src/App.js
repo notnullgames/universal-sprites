@@ -19,13 +19,20 @@ export default () => {
     shirt: 'none',
     back: 'none',
     legs: 'none',
+    headwear: 'none',
+    belt: 'none',
     beard_style: 'bald',
     beard: hairPalettes.Default,
-    shoes: 'barefoot'
+    shoes: 'barefoot',
+    quiver: false
   })
 
   const onChange = e => {
-    setValues({ ...values, [e.target.name]: e.target.value })
+    if (e.target.type === 'checkbox') {
+      setValues({ ...values, [e.target.name]: !values[[e.target.name]] })
+    } else {
+      setValues({ ...values, [e.target.name]: e.target.value })
+    }
   }
 
   return (
@@ -40,7 +47,7 @@ export default () => {
         <a href='https://github.com/notnullgames/universal-sprites'><img style={{ position: 'absolute', top: 0, right: 0, border: 0 }} src='https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png' alt='Fork me on GitHub' /></a>
         <DisplayCurrent values={values} width={275} height={120} />
         <form>
-          <h3>Skin</h3>
+          <h3>Body</h3>
           <article>
             <div className='mui-select'>
               <label htmlFor='base'>Body Type</label>
@@ -57,10 +64,10 @@ export default () => {
             )}
           </article>
 
-          <h3>Hair</h3>
+          <h3>Head</h3>
           <article>
             <div>
-              <Select name='hair_style' label='Head' value={values.hair_style} onChange={onChange}>
+              <Select name='hair_style' label='Hair' value={values.hair_style} onChange={onChange}>
                 <Option value='bald' label='Bald' />
                 <Option value='bangs' label='Bangs' />
                 <Option value='bangslong' label='Long Bangs' />
@@ -97,7 +104,7 @@ export default () => {
             </div>
             <div>
               <Select name='beard_style' label='Facial Hair' value={values.beard_style} onChange={onChange}>
-                <Option value='bald' label='Bald' />
+                <Option value='bald' label='None' />
                 <Option value='beard' label='Beard' />
                 <Option value='bigstache' label='Big Stache' />
                 <Option value='fiveoclock' label="5 O'clock Shadow" />
@@ -106,9 +113,31 @@ export default () => {
               </Select>
               {values.beard_style !== 'bald' && <ColorPalette label='Facial Hair Color' name='beard' options={hairPalettes} value={values.beard} onChange={onChange} /> }
             </div>
+            <div>
+              <Select name='headwear' label='Headwear' value={values.headwear} onChange={onChange}>
+                <Option value='none' label='None' />
+                <Option value='head/bandanas/GENDER/red' label='Bandana' />
+                <Option value='head/caps/GENDER/leather_cap_GENDER' label='Leather Cap' />
+                <Option value='head/helms/GENDER/chainhat_GENDER' label='Chain Hat' />
+                <Option value='head/helms/GENDER/golden_helm_GENDER' label='Golden Helm' />
+                <Option value='head/helms/GENDER/metal_helm_GENDER' label='Metal Helm' />
+                <Option value='head/hoods/GENDER/chain_hood_GENDER' label='Chain Hood' />
+                <Option value='head/hoods/GENDER/cloth_hood_GENDER' label='Cloth Hood' />
+                <Option value='head/tiaras_female/bronze' label='Bronze Tiara' />
+                <Option value='head/tiaras_female/gold' label='Gold Tiara' />
+                <Option value='head/tiaras_female/iron' label='Iron Tiara' />
+                <Option value='head/tiaras_female/purple' label='Purple Tiara' />
+                <Option value='head/tiaras_female/silver' label='Silver Tiara' />
+              </Select>
+            </div>
           </article>
 
           <h3>Torso</h3>
+          <article>
+            <div className='mui-checkbox'>
+              <label><input value type='checkbox' onChange={onChange} name='quiver' checked={values.quiver} />Arrow quiver</label>
+            </div>
+          </article>
           <article>
             <div>
               <Select name='shirt' label='Shirt' value={values.shirt} onChange={onChange}>
@@ -182,6 +211,20 @@ export default () => {
                 <Option value='torso/back/cape/tattered/female/tattercape_yellow' label='Yellow Tattered Cape' />
                 <Option value='torso/back/cape/trimmed/female/trimcape_whiteblue' label='White / Blue Trim Cape' />
                 <Option value='torso/back/wings/wings_no_th-sh' label='Wings' />
+              </Select>
+            </div>
+            <div>
+              <Select name='belt' label='Belt' value={values.belt} onChange={onChange}>
+                <Option value='none' label='None' />
+                <Option value='belt/buckles_female_no_th-sh/bronze' label='Bronze' />
+                <Option value='belt/buckles_female_no_th-sh/gold' label='Gold' />
+                <Option value='belt/buckles_female_no_th-sh/iron' label='Iron' />
+                <Option value='belt/buckles_female_no_th-sh/silver' label='Silver' />
+                <Option value='belt/cloth/female/black_female_no_th-sh' label='Black Cloth' />
+                <Option value='belt/cloth/female/brown_female_no_th-sh' label='Brown Cloth' />
+                <Option value='belt/cloth/female/teal2_cloth_female' label='Teal Cloth' />
+                <Option value='belt/cloth/GENDER/white_cloth_GENDER' label='White Cloth' />
+                <Option value='belt/leather/GENDER/leather_GENDER' label='Leather' />
               </Select>
             </div>
           </article>

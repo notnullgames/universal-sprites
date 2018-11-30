@@ -32,12 +32,15 @@ export const getTextures = memoize(values => {
   const bodyShader = values.base !== 'male/skeleton' && swapPaletteFrag(lightSkinPalette, colorMap(values.skin))
   const hairShader = hair && swapPaletteFrag(defaultHairPalette, colorMap(values.hair))
   const beardShader = beard && swapPaletteFrag(defaultHairPalette, colorMap(values.beard))
-  return { shoes, gender, body, hair, beard, shirt, back, legs, bodyShader, hairShader, beardShader }
+  const quiver = values.quiver && PIXI.Texture.fromImage(require(`./images/behind_body/equipment/quiver.png`))
+  const headwear = values.headwear !== 'none' && PIXI.Texture.fromImage(require(`./images/${values.headwear.replace(/GENDER/g, gender)}.png`))
+  const belt = values.belt !== 'none' && PIXI.Texture.fromImage(require(`./images/${values.belt.replace(/GENDER/g, gender)}.png`))
+  return { shoes, gender, body, hair, beard, shirt, back, legs, bodyShader, hairShader, beardShader, quiver, headwear, belt }
 })
 
 // core drawing function that combines all layers into a full spritesheet
 export const createComposite = (values) => {
-  const { body, hair, shirt, back, legs, bodyShader, hairShader, beard, beardShader, shoes } = getTextures(values)
+  const { body, hair, shirt, back, legs, bodyShader, hairShader, beard, beardShader, shoes, quiver, headwear, belt } = getTextures(values)
   const stage = new PIXI.Container()
   const bodySprite = new PIXI.Sprite(body)
   bodySprite.filters = [bodyShader]
@@ -46,6 +49,9 @@ export const createComposite = (values) => {
     const hairSprite = new PIXI.Sprite(hair)
     hairSprite.filters = [hairShader]
     stage.addChild(hairSprite)
+  }
+  if (headwear) {
+    stage.addChild(new PIXI.Sprite(headwear))
   }
   if (beard) {
     const beardSprite = new PIXI.Sprite(beard)
@@ -58,11 +64,17 @@ export const createComposite = (values) => {
   if (shirt) {
     stage.addChild(new PIXI.Sprite(shirt))
   }
+  if (belt) {
+    stage.addChild(new PIXI.Sprite(belt))
+  }
   if (shoes) {
     stage.addChild(new PIXI.Sprite(shoes))
   }
   if (back) {
     stage.addChild(new PIXI.Sprite(back))
+  }
+  if (quiver) {
+    stage.addChild(new PIXI.Sprite(quiver))
   }
   return stage
 }
